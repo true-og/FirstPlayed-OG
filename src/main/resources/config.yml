@@ -1,0 +1,12 @@
+# This is the configuration file for the FirstPlayed-OG plugin.
+
+# Date format - Uses Java's SimpleDateFormat class
+# Formats are listed here: https://docs.oracle.com/javase/7/docs/api/java/text/SimpleDateFormat.html
+date_format: dd/MM/yyyy HH:mm z
+
+# Custom Messages
+prefix: "&8[&aFirstPlayed &4OG&8] "
+message_me: "&aYou first joined &2True&4OG &aon: "
+message_other: "&afirst joined &2True&4OG &aon: "
+invalid_player_error: "&cERROR! Not a valid player: "
+too_many_arguments_error: "&cERROR! Too many arguments."

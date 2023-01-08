@@ -1,0 +1,23 @@
+name: FirstPlayed-OG
+author: NotAlexNoyle
+description: A Spigot plugin that allows you to easily determine when exactly you or others first joined the server!
+website: https://github.com/NotAlexNoyle/FirstPlayed-OG
+version: 1.0
+api-version: 1.18
+main: plugin.FirstPlayed
+
+commands:
+  firstplayed:
+    description: Shows when you first joined the server
+    aliases: fp
+    permission: firstplayed.me
+    permission-message: "§cERROR: You do not have the permission to use this command."
+    usage: "§6Usage: §e/firstplayed username"
+
+permissions:
+  firstplayed.me:
+    description: Allows you to get your own join date
+    default: op
+  firstplayed.other:
+    description: Allows you to get another players join date
+    default: op
