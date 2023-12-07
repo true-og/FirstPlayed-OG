@@ -12,7 +12,7 @@ SpigotMC Listing: https://www.spigotmc.org/resources/firstplayed-og.104595/
 
 Works similar to JoinDate, but more compatible with newer versions of Minecraft.
 
-Supports LuckPerms, Java 17, and Gradle. Built against Purpur 1.18.2, though it may support other versions as well.
+Supports LuckPerms, Java 17, and Gradle. Built against Purpur 1.19.4, though it may support later versions as well.
 
 FirstPlayed-OG and all other plugins in the "OG" suite are developed for [TrueOG](https://trueog.net), a 100% free and open source Minecraft Server. Need support? Join our [Discord](https://discord.gg/ma9pMYpBU6) and ask your question in #developer-chat.
 
