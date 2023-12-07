@@ -8,27 +8,27 @@ import org.bukkit.scheduler.BukkitTask;
 public class FirstPlayed extends JavaPlugin {
 
 	// config.yml file to object initialization.
-    public FileConfiguration config = getConfig();
+	public FileConfiguration config = getConfig();
 
-    // What to do when the plugin is run by the server.
-    @Override
-    public void onEnable() {
+	// What to do when the plugin is run by the server.
+	@Override
+	public void onEnable() {
 
-    	// Run command when plugin event is triggered.
-        this.getCommand("firstplayed").setExecutor(new CommandManager());
+		// Run command when plugin event is triggered.
+		this.getCommand("firstplayed").setExecutor(new CommandManager());
 
-        // Save config.yml and reload settings.
-        saveDefaultConfig();
-        reloadConfig();
+		// Save config.yml and reload settings.
+		saveDefaultConfig();
+		reloadConfig();
 
-    }
+	}
 
-    // Runs plugin asynchronously so multiple players can use it at once efficiently.
-    public BukkitTask runTaskAsynchronously(final Runnable run) {
+	// Runs plugin asynchronously so multiple players can use it at once efficiently.
+	public BukkitTask runTaskAsynchronously(final Runnable run) {
 
-    	// Schedule Processes.
+		// Schedule Processes.
 		return this.getServer().getScheduler().runTaskAsynchronously(this, run);
 
-    }
+	}
 
 }

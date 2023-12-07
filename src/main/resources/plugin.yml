@@ -2,8 +2,8 @@ name: FirstPlayed-OG
 author: NotAlexNoyle
 description: A Spigot plugin that allows you to easily determine when exactly you or others first joined the server!
 website: https://github.com/NotAlexNoyle/FirstPlayed-OG
-version: 1.0
-api-version: 1.18
+version: '${version}'
+api-version: '${apiVersion}'
 main: plugin.FirstPlayed
 
 commands:

@@ -18,13 +18,26 @@ FirstPlayed-OG and all other plugins in the "OG" suite are developed for [TrueOG
 
 Future Enhancements Planned:
 
-- ability to set custom time zone.
+- Ability to set custom time zone.
 
-- "at" before time
+- "at" before time.
 
-- PlaceholderAPI support
+- Username rank color in messages.
+
+- PlaceholderAPI support.
+
+- Async database offline player lookup scheme.
+
+- Tab completion for offline players.
 
 Changelog:
+
+v2.0 Release:
+
+- Updated for 1.19.4
+- Updated gradle to 8.5
+- Improved message formatting
+- Refactored command manager
 
 v1.0 Release:
 - Forked from [PACFirstPlayed](https://github.com/PeaceAndCubeMC/PACFirstPlayed)
