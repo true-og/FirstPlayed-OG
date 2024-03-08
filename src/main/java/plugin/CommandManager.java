@@ -24,6 +24,7 @@ import plugin.RedisKT.*;
 // Extends bukkit classes to run commands with tab completion.
 public class CommandManager implements CommandExecutor, TabExecutor {
 
+	RedisKT rediskt = new RedisKT("localhost", 6379);
 	// Enable the conversion of text from config.yml to objects.
 	public FileConfiguration config = Bukkit.getPluginManager().getPlugin("FirstPlayed-OG").getConfig();
 
@@ -109,12 +110,20 @@ public class CommandManager implements CommandExecutor, TabExecutor {
 				 System.out.println(jedis.get("bike:1"));
 		}
 		*/
-		RedisKT rediskt = new RedisKT("localhost", 6379);
-		System.out.println(rediskt.makeQuery("bike:1"));
 		// Derive player object from the username of the person who ran the command.
 		Player playerToLookUp = (Player) sender;
-		// Get join data from world files.
-		long timestamp = playerToLookUp.getFirstPlayed();
+		String playerUUID = playerToLookUp.getUniqueId().toString();
+		long timestamp = rediskt.getJoinDate(playerUUID);
+		boolean joindateMissing = false;
+		// Get join data from world files if redis lookup fails
+		if(timestamp == -1) {
+			System.out.println(playerUUID + " needs to be added to cache");
+			timestamp = playerToLookUp.getFirstPlayed();
+			joindateMissing = true;
+		}
+		else {
+			System.out.println(playerUUID + " is in cache");
+		}
 		// Convert timestamp to String.
 		String date = new SimpleDateFormat(config.getString("date_format")).format(new Date(timestamp));
 
@@ -125,6 +134,11 @@ public class CommandManager implements CommandExecutor, TabExecutor {
 		// Send the player their own join information in chat.
 		sender.sendMessage(ownInfoContainer);
 
+		// if joindate wasn't in database try to add it
+		if (joindateMissing) {
+			System.out.println("Adding " + playerUUID + " to cache");
+			rediskt.registerJoinDate(playerUUID, timestamp);
+		}
 	}
 
 	// Runs when player specifies one argument.
@@ -136,7 +150,17 @@ public class CommandManager implements CommandExecutor, TabExecutor {
 		if (offlinePlayer.hasPlayedBefore()) {
 
 			// Get join data from world files.
-			long timestamp = offlinePlayer.getFirstPlayed();
+			String playerUUID = offlinePlayer.getUniqueId().toString();
+			long timestamp = rediskt.getJoinDate(playerUUID);
+			if(timestamp == -1) {
+				System.out.println(playerUUID + " needs to be added to cache");
+				timestamp = offlinePlayer.getFirstPlayed();
+				System.out.println("Adding " + playerUUID + " to cache");
+				rediskt.registerJoinDate(playerUUID, timestamp);
+			}
+			else {
+				System.out.println(playerUUID + " is in cache");
+			}
 			// Convert timestamp to String.
 			String date = new SimpleDateFormat(config.getString("date_format")).format(new Date(timestamp));
 
