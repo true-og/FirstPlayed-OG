@@ -7,14 +7,14 @@ plugins {
 }
 
 java {
- 
 	// Declare java version
- 	sourceCompatibility = JavaVersion.VERSION_17
-
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+        vendor = JvmVendorSpec.GRAAL_VM
+    }
 }
 
-group = "net.trueog.firstplayed-og" // Declare bundle identifier.
-version = "2.0" // Declare plugin version (will be in .jar).
+group = "net.trueog.firstplayed-og" // Declare bundle identifier. version = "2.0" // Declare plugin version (will be in .jar).
 
 def apiVersion = "1.19" // Declare minecraft server target version.
 
