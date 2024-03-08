@@ -57,7 +57,6 @@ repositories {
 dependencies {
 
     compileOnly "org.purpurmc.purpur:purpur-api:1.19.4-R0.1-SNAPSHOT"
-    implementation 'redis.clients:jedis:4.3.1'
     implementation "io.github.crackthecodeabhi:kreds:0.9.1"
 
 }
