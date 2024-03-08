@@ -17,6 +17,10 @@ import org.bukkit.entity.Player;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
+
+import plugin.RedisKT.*;
 // Extends bukkit classes to run commands with tab completion.
 public class CommandManager implements CommandExecutor, TabExecutor {
 
@@ -96,6 +100,17 @@ public class CommandManager implements CommandExecutor, TabExecutor {
 	// Runs when player specifies no arguments.
 	public void sendOwnInfo(CommandSender sender) {
 
+
+		// redis demo
+		// TODO: get database location from config
+		/*
+		JedisPool pool = new JedisPool("localhost", 6379);
+		try (Jedis jedis = pool.getResource()) {
+				 System.out.println(jedis.get("bike:1"));
+		}
+		*/
+		RedisKT rediskt = new RedisKT("localhost", 6379);
+		System.out.println(rediskt.makeQuery("bike:1"));
 		// Derive player object from the username of the person who ran the command.
 		Player playerToLookUp = (Player) sender;
 		// Get join data from world files.
