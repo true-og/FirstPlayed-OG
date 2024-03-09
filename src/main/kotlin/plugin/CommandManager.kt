@@ -10,13 +10,19 @@ import org.bukkit.configuration.file.FileConfiguration
 import org.bukkit.entity.Player
 import java.text.SimpleDateFormat
 import java.util.*
-
+import io.github.crackthecodeabhi.kreds.connection.Endpoint
+import io.github.crackthecodeabhi.kreds.connection.KredsClient
+import io.github.crackthecodeabhi.kreds.connection.newClient
+import kotlinx.coroutines.*
 // Extends bukkit classes to run commands with tab completion.
 class CommandManager : CommandExecutor, TabExecutor {
-    var rediskt: RedisKT = RedisKT("localhost", 6379)
-
-    // Enable the conversion of text from config.yml to objects.
     var config: FileConfiguration = Bukkit.getPluginManager().getPlugin("FirstPlayed-OG")!!.config
+    // TODO: get these from config
+    val redisURL: String = config.getString("redis_url") ?: "localhost"
+    val redisPort = config.getInt("redis_port")
+    val redisClient = newClient(Endpoint(redisURL,redisPort))
+    private val databasePrefix = config.getString("redis_database_prefix") ?: "firstplayedog:uuid:"
+    // Enable the conversion of text from config.yml to objects.
 
     // Command execution event handler extending bukkit's CommandManager.
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<String>): Boolean {
@@ -84,34 +90,38 @@ class CommandManager : CommandExecutor, TabExecutor {
 		*/
         // Derive player object from the username of the person who ran the command.
 
+        GlobalScope.launch {
+            val p = sender as Player
+            val uuid = p.uniqueId
+            val timestamp_from_database: String? = redisClient.get(databasePrefix + uuid.toString())
+            // not giving timestamp a default value helps with compile time checking on whether we have set it or not
+            var timestamp: Long
+            if(timestamp_from_database == null) {
+                // not in database
+                println("$uuid needs to be added to cache")
+                timestamp = p.firstPlayed
+                // try adding timestamp to cache
+                println("adding $uuid to cache")
+                redisClient.set(databasePrefix + uuid.toString(), timestamp.toString())
+            }
 
-        val playerToLookUp = sender as Player
-        val playerUUID = playerToLookUp.uniqueId.toString()
-        var timestamp = rediskt.getJoinDate(playerUUID)
-        var joindateMissing = false
-        // Get join data from world files if redis lookup fails
-        if (timestamp == -1L) {
-            println("$playerUUID needs to be added to cache")
-            timestamp = playerToLookUp.firstPlayed
-            joindateMissing = true
-        } else {
-            println("$playerUUID is in cache")
+            else {
+                // in database
+                timestamp = timestamp_from_database.toLong()
+            }
+
+            // Convert timestamp to String.
+            val date = SimpleDateFormat(config.getString("date_format")).format(Date(timestamp))
+
+            // Format the player's own join information using the TextComponent API.
+            val ownInfo = config.getString("prefix") + config.getString("message_me") + date
+            val ownInfoContainer = LegacyComponentSerializer.legacyAmpersand().deserialize(ownInfo)
+
+            // Send the player their own join information in chat.
+            sender.sendMessage(ownInfoContainer)
+
         }
-        // Convert timestamp to String.
-        val date = SimpleDateFormat(config.getString("date_format")).format(Date(timestamp))
 
-        // Format the player's own join information using the TextComponent API.
-        val ownInfo = config.getString("prefix") + config.getString("message_me") + date
-        val ownInfoContainer = LegacyComponentSerializer.legacyAmpersand().deserialize(ownInfo)
-
-        // Send the player their own join information in chat.
-        sender.sendMessage(ownInfoContainer)
-
-        // if joindate wasn't in database try to add it
-        if (joindateMissing) {
-            println("Adding $playerUUID to cache")
-            rediskt.registerJoinDate(playerUUID, timestamp)
-        }
     }
 
     // Runs when player specifies one argument.
@@ -121,27 +131,33 @@ class CommandManager : CommandExecutor, TabExecutor {
         val offlinePlayer = Bukkit.getOfflinePlayer(target)
         // Manually check if player is real because offlinePlayer is always a valid Object.
         if (offlinePlayer.hasPlayedBefore()) {
-            // Get join data from world files.
+            GlobalScope.launch {
+                val uuid = offlinePlayer.uniqueId
+                // not giving timestamp a default value helps with compile time checking on whether we have set it or not
+                var timestamp: Long
+                val timestamp_from_database: String? = redisClient.get(databasePrefix + uuid)
+                if(timestamp_from_database == null) {
+                    // get from world file
+                    println("$uuid is not in cache")
+                    timestamp = offlinePlayer.firstPlayed
+                    println("adding $uuid to cache")
+                    redisClient.set(databasePrefix + uuid.toString(), timestamp.toString())
+                } else {
+                    // get from database
+                    println("$uuid is in cache!")
+                    timestamp = timestamp_from_database.toLong()
+                }
+                // continue as usual
+                // Convert timestamp to String.
+                val date = SimpleDateFormat(config.getString("date_format")).format(Date(timestamp))
 
-            val playerUUID = offlinePlayer.uniqueId.toString()
-            var timestamp = rediskt.getJoinDate(playerUUID)
-            if (timestamp == -1L) {
-                println("$playerUUID needs to be added to cache")
-                timestamp = offlinePlayer.firstPlayed
-                println("Adding $playerUUID to cache")
-                rediskt.registerJoinDate(playerUUID, timestamp)
-            } else {
-                println("$playerUUID is in cache")
+                // Format the player's requested join information using the TextComponent API.
+                val requestedInfo = config.getString("prefix") + "&a" + target + " " + config.getString("message_other") + date
+                val requestedInfoContainer = LegacyComponentSerializer.legacyAmpersand().deserialize(requestedInfo)
+
+                // Send the player their requested join information in chat.
+                sender.sendMessage(requestedInfoContainer)
             }
-            // Convert timestamp to String.
-            val date = SimpleDateFormat(config.getString("date_format")).format(Date(timestamp))
-
-            // Format the player's requested join information using the TextComponent API.
-            val requestedInfo = config.getString("prefix") + "&a" + target + " " + config.getString("message_other") + date
-            val requestedInfoContainer = LegacyComponentSerializer.legacyAmpersand().deserialize(requestedInfo)
-
-            // Send the player their requested join information in chat.
-            sender.sendMessage(requestedInfoContainer)
         } else {
             // Format the player not found error using the TextComponent API.
 
