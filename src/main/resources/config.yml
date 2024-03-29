@@ -10,3 +10,6 @@ message_me: "&aYou first joined &2True&4OG &aon: "
 message_other: "&afirst joined &2True&4OG &aon: "
 invalid_player_error: "&cERROR! Not a valid player: "
 too_many_arguments_error: "&cERROR! Too many arguments."
+redis_url: "localhost"
+redis_port: 6379
+redis_database_prefix: "firstplayedog:uuid:"
