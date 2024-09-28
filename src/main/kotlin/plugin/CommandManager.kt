@@ -80,15 +80,7 @@ class CommandManager : CommandExecutor, TabExecutor {
 
     // Runs when player specifies no arguments.
     fun sendOwnInfo(sender: CommandSender) {
-        // redis demo
-        // TODO: get database location from config
-        /*
-		JedisPool pool = new JedisPool("localhost", 6379);
-		try (Jedis jedis = pool.getResource()) {
-				 System.out.println(jedis.get("bike:1"));
-		}
-		*/
-        // Derive player object from the username of the person who ran the command.
+    // Derive player object from the username of the person who ran the command.
 
         GlobalScope.launch {
             val p = sender as Player
