@@ -122,6 +122,7 @@ public class CommandManager implements CommandExecutor, TabExecutor {
 
 			// Get join data from world files.
 			long timestamp = offlinePlayer.getFirstPlayed();
+
 			// Convert timestamp to String.
 			String date = new SimpleDateFormat(config.getString("date_format")).format(new Date(timestamp));
 
