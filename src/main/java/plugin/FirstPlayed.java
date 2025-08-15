@@ -21,12 +21,16 @@ public class FirstPlayed extends JavaPlugin {
         // Save config.yml and reload settings.
         saveDefaultConfig();
         reloadConfig();
+
     }
 
-    // Runs plugin asynchronously so multiple players can use it at once efficiently.
+    // Runs plugin asynchronously so multiple players can use it at once
+    // efficiently.
     public BukkitTask runTaskAsynchronously(final Runnable run) {
 
         // Schedule Processes.
         return this.getServer().getScheduler().runTaskAsynchronously(this, run);
+
     }
+
 }
