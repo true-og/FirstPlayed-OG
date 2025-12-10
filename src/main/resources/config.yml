@@ -6,7 +6,7 @@ date_format: dd/MM/yyyy HH:mm z
 
 # Custom Messages
 prefix: "&8[&aFirstPlayed &4OG&8] "
-message_me: "&aYou first joined &2True&4OG &aon: "
-message_other: "&afirst joined &2True&4OG &aon: "
+message_me: "&3You first joined &aTrue&cOG &eNetwork &3on: "
+message_other: "&3first joined &aTrue&cOG &eNetwork &3on: "
 invalid_player_error: "&cERROR! Not a valid player: "
 too_many_arguments_error: "&cERROR! Too many arguments."
