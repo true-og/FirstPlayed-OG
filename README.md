@@ -2,11 +2,11 @@
 
 *A modern alternative to JoinDate Forked from PACFirstPlayed by PeaceAndCubeMC*
 
-![Icon](https://github.com/NotAlexNoyle/FirstPlayed-OG/blob/main/assets/icon.png?raw=true)
+![Icon](https://git.trueog.net/trueog/FirstPlayed-OG/raw/branch/main/assets/icon.png)
 
 *A Spigot plugin that allows you to easily determine when exactly you or others first joined the server!*
 
-![FirstPlayed OG](https://github.com/NotAlexNoyle/FirstPlayed-OG/blob/main/assets/example.png?raw=true)
+![FirstPlayed OG](https://git.trueog.net/trueog/FirstPlayed-OG/raw/branch/main/assets/example.png)
 
 SpigotMC Listing: https://www.spigotmc.org/resources/firstplayed-og.104595/
 
